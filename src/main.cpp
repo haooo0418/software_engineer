@@ -86,13 +86,13 @@ void quickAddTransaction(AccountingSystem& system) {
     } else {
         std::cout << "  1. Food  2. Transport  3. Shopping  4. Entertainment  5. Medical  6. Service  7. Other\n";
     }
-    std::cout << "Enter分类name: ";
+    std::cout << "Enter category name: ";
     std::string category;
     std::getline(std::cin, category);
 
     std::cout << "\nAccount:\n";
     std::cout << "  1. WeChat  2. Alipay  3. Bank  4. Cash\n";
-    std::cout << "Enter账户name: ";
+    std::cout << "Enter account name: ";
     std::string account;
     std::getline(std::cin, account);
 
@@ -124,8 +124,8 @@ void quickAddTransaction(AccountingSystem& system) {
         std::cout << "\nTransaction Details:\n";
         std::cout << "  Type: " << (type == TransactionType::INCOME ? "Income" : "Expense") << "\n";
         std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << amount << "\n";
-        std::cout << "  分类: " << category << "\n";
-        std::cout << "  账户: " << account << "\n";
+        std::cout << "  Category: " << category << "\n";
+        std::cout << "  Account: " << account << "\n";
         
         char dateStr[20];
         struct tm* timeinfo = localtime(&date);
@@ -144,7 +144,7 @@ void quickAddTransaction(AccountingSystem& system) {
 
 void viewTransactionList(AccountingSystem& system) {
     clearScreen();
-    displayHeader("账目列表");
+    displayHeader("Transaction List");
 
     auto transactions = system.getTransactions();
     
@@ -158,8 +158,8 @@ void viewTransactionList(AccountingSystem& system) {
               << std::setw(20) << "Transaction ID"
               << std::setw(8) << "Type"
               << std::setw(12) << "Amount"
-              << std::setw(12) << "分类"
-              << std::setw(12) << "账户"
+              << std::setw(12) << "Category"
+              << std::setw(12) << "Account"
               << std::setw(12) << "Date"
               << "Notes\n";
     std::cout << std::string(88, '-') << "\n";
@@ -184,7 +184,7 @@ void editTransaction(AccountingSystem& system) {
     displayHeader("Edit Transaction");
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Enter要编辑的Transaction ID: ";
+    std::cout << "Enter transaction to edit ID: ";
     std::string transactionId;
     std::getline(std::cin, transactionId);
 
@@ -198,13 +198,13 @@ void editTransaction(AccountingSystem& system) {
     std::cout << "\nCurrent transaction:\n";
     std::cout << "  Type: " << t->getTypeString() << "\n";
     std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
-    std::cout << "  分类: " << t->getCategory() << "\n";
-    std::cout << "  账户: " << t->getAccount() << "\n";
+    std::cout << "  Category: " << t->getCategory() << "\n";
+    std::cout << "  Account: " << t->getAccount() << "\n";
     std::cout << "  Date: " << t->getDateString() << "\n";
     std::cout << "  Notes: " << t->getNotes() << "\n\n";
 
     int typeChoice;
-    std::cout << "New交易Type (1.Income 2.Expense): ";
+    std::cout << "New transaction type (1.Income 2.Expense): ";
     std::cin >> typeChoice;
     TransactionType type = (typeChoice == 1) ? TransactionType::INCOME : TransactionType::EXPENSE;
 
@@ -213,11 +213,11 @@ void editTransaction(AccountingSystem& system) {
     std::cin >> amount;
     std::cin.ignore();
 
-    std::cout << "New分类: ";
+    std::cout << "NewCategory: ";
     std::string category;
     std::getline(std::cin, category);
 
-    std::cout << "New账户: ";
+    std::cout << "NewAccount: ";
     std::string account;
     std::getline(std::cin, account);
 
@@ -248,7 +248,7 @@ void deleteTransaction(AccountingSystem& system) {
     displayHeader("Delete Transaction");
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Enter要删除的Transaction ID: ";
+    std::cout << "Enter transaction to delete ID: ";
     std::string transactionId;
     std::getline(std::cin, transactionId);
 
@@ -262,7 +262,7 @@ void deleteTransaction(AccountingSystem& system) {
     std::cout << "\nTransaction to delete:\n";
     std::cout << "  Type: " << t->getTypeString() << "\n";
     std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
-    std::cout << "  分类: " << t->getCategory() << "\n";
+    std::cout << "  Category: " << t->getCategory() << "\n";
     std::cout << "  Date: " << t->getDateString() << "\n\n";
 
     std::cout << "Confirm delete? (y/n): ";
@@ -291,8 +291,8 @@ void showOverview(AccountingSystem& system) {
     double balance = system.getBalance();
 
     std::cout << "╔═══════════════════════════════════════════════════════╗\n";
-    std::cout << "║  总Income:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalIncome << "║\n";
-    std::cout << "║  总Expense:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalExpense << "║\n";
+    std::cout << "║  Total Income:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalIncome << "║\n";
+    std::cout << "║  Total Expense:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalExpense << "║\n";
     std::cout << "║  ───────────────────────────────────────────────────  ║\n";
     std::cout << "║  Net Balance:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << balance << "║\n";
     std::cout << "╚═══════════════════════════════════════════════════════╝\n";
@@ -321,27 +321,27 @@ void showStatistics(AccountingSystem& system) {
     switch (choice) {
         case 1: {
             auto stats = Statistics::getMonthlyStatistics(transactions);
-            Visualization::displayTimeBarChart(stats, "月度统计");
+            Visualization::displayTimeBarChart(stats, "Monthly Statistics");
             break;
         }
         case 2: {
             auto stats = Statistics::getYearlyStatistics(transactions);
-            Visualization::displayTimeBarChart(stats, "年度统计");
+            Visualization::displayTimeBarChart(stats, "Yearly Statistics");
             break;
         }
         case 3: {
             auto stats = Statistics::getIncomeByCategory(transactions);
-            Visualization::displayCategoryPieChart(stats, "Income分类统计");
+            Visualization::displayCategoryPieChart(stats, "Income by Category");
             break;
         }
         case 4: {
             auto stats = Statistics::getExpenseByCategory(transactions);
-            Visualization::displayCategoryPieChart(stats, "Expense分类统计");
+            Visualization::displayCategoryPieChart(stats, "Expense by Category");
             break;
         }
         case 5: {
             auto stats = Statistics::getAccountStatistics(transactions);
-            Visualization::displayAccountBarChart(stats, "账户统计");
+            Visualization::displayAccountBarChart(stats, "Account Statistics");
             break;
         }
         case 6:
@@ -359,7 +359,7 @@ void searchTransactions(AccountingSystem& system) {
     displayHeader("Search");
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << "Enter搜索关键词 (分类/账户/Notes): ";
+    std::cout << "Enter search keyword (category/account/notes): ";
     std::string keyword;
     std::getline(std::cin, keyword);
 
@@ -377,8 +377,8 @@ void searchTransactions(AccountingSystem& system) {
               << std::setw(20) << "Transaction ID"
               << std::setw(8) << "Type"
               << std::setw(12) << "Amount"
-              << std::setw(12) << "分类"
-              << std::setw(12) << "账户"
+              << std::setw(12) << "Category"
+              << std::setw(12) << "Account"
               << std::setw(12) << "Date"
               << "Notes\n";
     std::cout << std::string(88, '-') << "\n";
@@ -414,7 +414,7 @@ void showLoginMenu(AccountingSystem& system) {
 
         if (choice == 1) {
             clearScreen();
-            displayHeader("用户Login");
+            displayHeader("User Login");
             
             std::cout << "Username: ";
             std::string username;
@@ -425,17 +425,17 @@ void showLoginMenu(AccountingSystem& system) {
             std::getline(std::cin, password);
 
             if (system.login(username, password)) {
-                showSuccessMessage("Login成功!");
+                showSuccessMessage("Login successful!");
                 std::cout << "Welcome back, " << username << "!\n";
                 waitForEnter();
                 return;
             } else {
-                showErrorMessage("Username或Password错误");
+                showErrorMessage("Invalid username or password");
                 waitForEnter();
             }
         } else if (choice == 2) {
             clearScreen();
-            displayHeader("用户Register");
+            displayHeader("User Registration");
             
             std::cout << "Username: ";
             std::string username;
@@ -446,11 +446,11 @@ void showLoginMenu(AccountingSystem& system) {
             std::getline(std::cin, password);
 
             if (system.registerUser(username, password)) {
-                showSuccessMessage("Register成功!");
-                std::cout << "您现在可以使用 " << username << " Login了\n";
+                showSuccessMessage("Registration successful!");
+                std::cout << "You can now login with " << username << "\n";
                 waitForEnter();
             } else {
-                showErrorMessage("Username已存在");
+                showErrorMessage("Username already exists");
                 waitForEnter();
             }
         } else if (choice == 3) {
@@ -501,7 +501,7 @@ int main() {
                 break;
             case 8:
                 system.logout();
-                std::cout << "\n已Logout\n";
+                std::cout << "\nLogged out\n";
                 waitForEnter();
                 break;
             default:

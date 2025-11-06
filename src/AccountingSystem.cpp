@@ -257,22 +257,26 @@ std::vector<Transaction> AccountingSystem::searchTransactions(const std::string&
     std::vector<Transaction> results;
     std::string userId = getCurrentUserId();
     std::string lowerKeyword = keyword;
-    std::transform(lowerKeyword.begin(), lowerKeyword.end(), lowerKeyword.begin(), ::tolower);
+    std::transform(lowerKeyword.begin(), lowerKeyword.end(), lowerKeyword.begin(), 
+                   [](unsigned char c){ return std::tolower(c); });
 
     for (const auto& t : transactions) {
         if (t.getUserId() != userId) continue;
 
         // Search in category
         std::string lowerCategory = t.getCategory();
-        std::transform(lowerCategory.begin(), lowerCategory.end(), lowerCategory.begin(), ::tolower);
+        std::transform(lowerCategory.begin(), lowerCategory.end(), lowerCategory.begin(), 
+                       [](unsigned char c){ return std::tolower(c); });
         
         // Search in notes
         std::string lowerNotes = t.getNotes();
-        std::transform(lowerNotes.begin(), lowerNotes.end(), lowerNotes.begin(), ::tolower);
+        std::transform(lowerNotes.begin(), lowerNotes.end(), lowerNotes.begin(), 
+                       [](unsigned char c){ return std::tolower(c); });
         
         // Search in account
         std::string lowerAccount = t.getAccount();
-        std::transform(lowerAccount.begin(), lowerAccount.end(), lowerAccount.begin(), ::tolower);
+        std::transform(lowerAccount.begin(), lowerAccount.end(), lowerAccount.begin(), 
+                       [](unsigned char c){ return std::tolower(c); });
 
         if (lowerCategory.find(lowerKeyword) != std::string::npos ||
             lowerNotes.find(lowerKeyword) != std::string::npos ||
