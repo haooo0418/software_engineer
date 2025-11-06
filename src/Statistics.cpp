@@ -7,6 +7,9 @@
 
 std::string Statistics::getMonthKey(time_t date) {
     struct tm* timeinfo = localtime(&date);
+    if (timeinfo == nullptr) {
+        return "Unknown";
+    }
     char buffer[8];
     strftime(buffer, sizeof(buffer), "%Y-%m", timeinfo);
     return std::string(buffer);
@@ -14,6 +17,9 @@ std::string Statistics::getMonthKey(time_t date) {
 
 std::string Statistics::getYearKey(time_t date) {
     struct tm* timeinfo = localtime(&date);
+    if (timeinfo == nullptr) {
+        return "Unknown";
+    }
     char buffer[5];
     strftime(buffer, sizeof(buffer), "%Y", timeinfo);
     return std::string(buffer);

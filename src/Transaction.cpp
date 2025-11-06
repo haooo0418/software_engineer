@@ -79,6 +79,9 @@ std::string Transaction::getTypeString() const {
 std::string Transaction::getDateString() const {
     char buffer[20];
     struct tm* timeinfo = localtime(&date);
+    if (timeinfo == nullptr) {
+        return "Invalid Date";
+    }
     strftime(buffer, sizeof(buffer), "%Y-%m-%d", timeinfo);
     return std::string(buffer);
 }
