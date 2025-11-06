@@ -75,7 +75,7 @@ void quickAddTransaction(AccountingSystem& system) {
     TransactionType type = (typeChoice == 1) ? TransactionType::INCOME : TransactionType::EXPENSE;
 
     double amount;
-    std::cout << "Amount: ¥";
+    std::cout << "Amount: $";
     std::cin >> amount;
 
     std::cin.ignore();
@@ -123,7 +123,7 @@ void quickAddTransaction(AccountingSystem& system) {
         showSuccessMessage("Transaction added successfully!");
         std::cout << "\nTransaction Details:\n";
         std::cout << "  Type: " << (type == TransactionType::INCOME ? "Income" : "Expense") << "\n";
-        std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << amount << "\n";
+        std::cout << "  Amount: $" << std::fixed << std::setprecision(2) << amount << "\n";
         std::cout << "  Category: " << category << "\n";
         std::cout << "  Account: " << account << "\n";
         
@@ -168,7 +168,7 @@ void viewTransactionList(AccountingSystem& system) {
         std::cout << std::left
                   << std::setw(20) << t.getTransactionId()
                   << std::setw(8) << t.getTypeString()
-                  << std::setw(12) << ("¥" + std::to_string(t.getAmount()).substr(0, 10))
+                  << std::setw(12) << ("$" + std::to_string(t.getAmount()).substr(0, 10))
                   << std::setw(12) << t.getCategory()
                   << std::setw(12) << t.getAccount()
                   << std::setw(12) << t.getDateString()
@@ -197,7 +197,7 @@ void editTransaction(AccountingSystem& system) {
 
     std::cout << "\nCurrent transaction:\n";
     std::cout << "  Type: " << t->getTypeString() << "\n";
-    std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
+    std::cout << "  Amount: $" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
     std::cout << "  Category: " << t->getCategory() << "\n";
     std::cout << "  Account: " << t->getAccount() << "\n";
     std::cout << "  Date: " << t->getDateString() << "\n";
@@ -209,7 +209,7 @@ void editTransaction(AccountingSystem& system) {
     TransactionType type = (typeChoice == 1) ? TransactionType::INCOME : TransactionType::EXPENSE;
 
     double amount;
-    std::cout << "NewAmount: ¥";
+    std::cout << "NewAmount: $";
     std::cin >> amount;
     std::cin.ignore();
 
@@ -261,7 +261,7 @@ void deleteTransaction(AccountingSystem& system) {
 
     std::cout << "\nTransaction to delete:\n";
     std::cout << "  Type: " << t->getTypeString() << "\n";
-    std::cout << "  Amount: ¥" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
+    std::cout << "  Amount: $" << std::fixed << std::setprecision(2) << t->getAmount() << "\n";
     std::cout << "  Category: " << t->getCategory() << "\n";
     std::cout << "  Date: " << t->getDateString() << "\n\n";
 
@@ -290,12 +290,12 @@ void showOverview(AccountingSystem& system) {
     double totalExpense = system.getTotalExpense();
     double balance = system.getBalance();
 
-    std::cout << "╔═══════════════════════════════════════════════════════╗\n";
-    std::cout << "║  Total Income:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalIncome << "║\n";
-    std::cout << "║  Total Expense:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalExpense << "║\n";
-    std::cout << "║  ───────────────────────────────────────────────────  ║\n";
-    std::cout << "║  Net Balance:  ¥" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << balance << "║\n";
-    std::cout << "╚═══════════════════════════════════════════════════════╝\n";
+    std::cout << "+-------------------------------------------------------+\n";
+    std::cout << "|  Total Income:  $" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalIncome << "|\n";
+    std::cout << "|  Total Expense:  $" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << totalExpense << "|\n";
+    std::cout << "|  ---------------------------------------------------  |\n";
+    std::cout << "|  Net Balance:  $" << std::left << std::setw(42) << std::fixed << std::setprecision(2) << balance << "|\n";
+    std::cout << "+-------------------------------------------------------+\n";
 
     waitForEnter();
 }
@@ -387,7 +387,7 @@ void searchTransactions(AccountingSystem& system) {
         std::cout << std::left
                   << std::setw(20) << t.getTransactionId()
                   << std::setw(8) << t.getTypeString()
-                  << std::setw(12) << ("¥" + std::to_string(t.getAmount()).substr(0, 10))
+                  << std::setw(12) << ("$" + std::to_string(t.getAmount()).substr(0, 10))
                   << std::setw(12) << t.getCategory()
                   << std::setw(12) << t.getAccount()
                   << std::setw(12) << t.getDateString()
@@ -400,9 +400,9 @@ void searchTransactions(AccountingSystem& system) {
 void showLoginMenu(AccountingSystem& system) {
     while (true) {
         clearScreen();
-        std::cout << "\n╔═══════════════════════════════════════════════════════╗\n";
-        std::cout << "║              Welcome to Personal Accounting System                   ║\n";
-        std::cout << "╚═══════════════════════════════════════════════════════╝\n\n";
+        std::cout << "\n+-------------------------------------------------------+\n";
+        std::cout << "|       Welcome to Personal Accounting System          |\n";
+        std::cout << "+-------------------------------------------------------+\n\n";
         std::cout << "  1. Login\n";
         std::cout << "  2. Register\n";
         std::cout << "  3. Exit\n";
