@@ -5,6 +5,10 @@
 #include <sstream>
 #include <iomanip>
 
+#ifdef _WIN32
+#pragma warning(disable: 4996) // Disable deprecation warnings for localtime on Windows
+#endif
+
 std::string Statistics::getMonthKey(time_t date) {
     struct tm* timeinfo = localtime(&date);
     if (timeinfo == nullptr) {

@@ -2,6 +2,10 @@
 #include <sstream>
 #include <iomanip>
 
+#ifdef _WIN32
+#pragma warning(disable: 4996) // Disable deprecation warnings for localtime on Windows
+#endif
+
 Transaction::Transaction()
     : transactionId(""), userId(""), type(TransactionType::EXPENSE),
       amount(0.0), category(""), account(""), date(0), notes("") {}
@@ -48,32 +52,32 @@ void Transaction::setTransactionId(const std::string& id) {
     this->transactionId = id;
 }
 
-void Transaction::setType(TransactionType type) {
-    this->type = type;
+void Transaction::setType(TransactionType newType) {
+    this->type = newType;
 }
 
-void Transaction::setAmount(double amount) {
-    this->amount = amount;
+void Transaction::setAmount(double newAmount) {
+    this->amount = newAmount;
 }
 
-void Transaction::setCategory(const std::string& category) {
-    this->category = category;
+void Transaction::setCategory(const std::string& newCategory) {
+    this->category = newCategory;
 }
 
-void Transaction::setAccount(const std::string& account) {
-    this->account = account;
+void Transaction::setAccount(const std::string& newAccount) {
+    this->account = newAccount;
 }
 
-void Transaction::setDate(time_t date) {
-    this->date = date;
+void Transaction::setDate(time_t newDate) {
+    this->date = newDate;
 }
 
-void Transaction::setNotes(const std::string& notes) {
-    this->notes = notes;
+void Transaction::setNotes(const std::string& newNotes) {
+    this->notes = newNotes;
 }
 
 std::string Transaction::getTypeString() const {
-    return (type == TransactionType::INCOME) ? "收入" : "支出";
+    return (type == TransactionType::INCOME) ? "Income" : "Expense";
 }
 
 std::string Transaction::getDateString() const {

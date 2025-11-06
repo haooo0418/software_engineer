@@ -22,20 +22,20 @@ std::string User::getUserId() const {
     return userId;
 }
 
-void User::setUsername(const std::string& username) {
-    this->username = username;
+void User::setUsername(const std::string& newUsername) {
+    this->username = newUsername;
 }
 
-void User::setPassword(const std::string& password) {
-    this->password = password;
+void User::setPassword(const std::string& newPassword) {
+    this->password = newPassword;
 }
 
-void User::setUserId(const std::string& userId) {
-    this->userId = userId;
+void User::setUserId(const std::string& newUserId) {
+    this->userId = newUserId;
 }
 
-bool User::verifyPassword(const std::string& password) const {
-    return this->password == password;
+bool User::verifyPassword(const std::string& inputPassword) const {
+    return this->password == inputPassword;
 }
 
 std::string User::serialize() const {

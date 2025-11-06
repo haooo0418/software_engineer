@@ -4,20 +4,28 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
-#include <sys/stat.h>
-#include <sys/types.h>
+
+#ifdef _WIN32
+    #include <direct.h>
+    #define mkdir(path, mode) _mkdir(path)
+#else
+    #include <sys/stat.h>
+    #include <sys/types.h>
+#endif
 
 // Helper function to create directory if it doesn't exist
 static void ensureDirectoryExists(const std::string& path) {
+#ifdef _WIN32
+    struct _stat st;
+    if (_stat(path.c_str(), &st) != 0) {
+        _mkdir(path.c_str());
+    }
+#else
     struct stat st;
     if (stat(path.c_str(), &st) != 0) {
-        // Directory doesn't exist, create it
-        #ifdef _WIN32
-            _mkdir(path.c_str());
-        #else
-            mkdir(path.c_str(), 0755);
-        #endif
+        mkdir(path.c_str(), 0755);
     }
+#endif
 }
 
 AccountingSystem::AccountingSystem() : currentUser(nullptr), dataDir("data") {

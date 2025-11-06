@@ -29,18 +29,18 @@ void Visualization::displayTimeBarChart(const std::vector<TimeStatistics>& stats
         std::cout << std::left << std::setw(10) << stat.period << " ";
         
         // Income bar
-        std::cout << "收入: ";
+        std::cout << "Income: ";
         drawBar("", stat.income, maxValue, barWidth);
         std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.income << std::endl;
         
         std::cout << std::setw(11) << " ";
         // Expense bar
-        std::cout << "支出: ";
+        std::cout << "Expense: ";
         drawBar("", stat.expense, maxValue, barWidth);
         std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
         
         std::cout << std::setw(11) << " ";
-        std::cout << "余额: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
+        std::cout << "Balance: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
     }
 }
 
@@ -72,10 +72,10 @@ void Visualization::displayCategoryPieChart(const std::vector<CategoryStatistics
         std::cout << getPercentageBar(percentage, barWidth);
         std::cout << " " << std::fixed << std::setprecision(1) << percentage << "% ";
         std::cout << "(¥" << std::fixed << std::setprecision(2) << stat.amount << ", ";
-        std::cout << stat.count << " 笔)" << std::endl;
+        std::cout << stat.count << " items)" << std::endl;
     }
     
-    std::cout << "\n总计: ¥" << std::fixed << std::setprecision(2) << total << std::endl;
+    std::cout << "\nTotal: ¥" << std::fixed << std::setprecision(2) << total << std::endl;
 }
 
 void Visualization::displayAccountBarChart(const std::vector<AccountStatistics>& stats, const std::string& title) {
@@ -103,18 +103,18 @@ void Visualization::displayAccountBarChart(const std::vector<AccountStatistics>&
         std::cout << std::left << std::setw(10) << stat.account << " ";
         
         // Income
-        std::cout << "收入: ";
+        std::cout << "Income: ";
         drawBar("", stat.income, maxValue, barWidth);
         std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.income << std::endl;
         
         std::cout << std::setw(11) << " ";
         // Expense
-        std::cout << "支出: ";
+        std::cout << "Expense: ";
         drawBar("", stat.expense, maxValue, barWidth);
         std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
         
         std::cout << std::setw(11) << " ";
-        std::cout << "余额: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
+        std::cout << "Balance: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
     }
 }
 
@@ -127,7 +127,7 @@ void Visualization::drawBar(const std::string& /* label */, double value, double
     std::cout << "[";
     for (int i = 0; i < barWidth; ++i) {
         if (i < filledWidth) {
-            std::cout << "█";
+            std::cout << "#";
         } else {
             std::cout << " ";
         }
@@ -141,7 +141,7 @@ std::string Visualization::getPercentageBar(double percentage, int barWidth) {
     std::string bar = "[";
     for (int i = 0; i < barWidth; ++i) {
         if (i < filledWidth) {
-            bar += "█";
+            bar += "#";
         } else {
             bar += " ";
         }
