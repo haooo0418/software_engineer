@@ -18,7 +18,9 @@ public:
 
 private:
     static void drawBar(const std::string& label, double value, double maxValue, int barWidth);
+    static void drawEnhancedBar(double value, double maxValue, int barWidth, char fillChar);
     static std::string getPercentageBar(double percentage, int barWidth);
+    static std::string getEnhancedPercentageBar(double percentage, int barWidth);
 };
 
 #endif // VISUALIZATION_H
