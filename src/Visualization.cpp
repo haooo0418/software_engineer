@@ -31,16 +31,16 @@ void Visualization::displayTimeBarChart(const std::vector<TimeStatistics>& stats
         // Income bar
         std::cout << "Income: ";
         drawBar("", stat.income, maxValue, barWidth);
-        std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.income << std::endl;
+        std::cout << " $" << std::fixed << std::setprecision(2) << stat.income << std::endl;
         
         std::cout << std::setw(11) << " ";
         // Expense bar
         std::cout << "Expense: ";
         drawBar("", stat.expense, maxValue, barWidth);
-        std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
+        std::cout << " $" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
         
         std::cout << std::setw(11) << " ";
-        std::cout << "Balance: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
+        std::cout << "Balance: $" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
     }
 }
 
@@ -71,11 +71,11 @@ void Visualization::displayCategoryPieChart(const std::vector<CategoryStatistics
         std::cout << std::left << std::setw(12) << stat.category << " ";
         std::cout << getPercentageBar(percentage, barWidth);
         std::cout << " " << std::fixed << std::setprecision(1) << percentage << "% ";
-        std::cout << "(¥" << std::fixed << std::setprecision(2) << stat.amount << ", ";
+        std::cout << "($" << std::fixed << std::setprecision(2) << stat.amount << ", ";
         std::cout << stat.count << " items)" << std::endl;
     }
     
-    std::cout << "\nTotal: ¥" << std::fixed << std::setprecision(2) << total << std::endl;
+    std::cout << "\nTotal: $" << std::fixed << std::setprecision(2) << total << std::endl;
 }
 
 void Visualization::displayAccountBarChart(const std::vector<AccountStatistics>& stats, const std::string& title) {
@@ -105,16 +105,16 @@ void Visualization::displayAccountBarChart(const std::vector<AccountStatistics>&
         // Income
         std::cout << "Income: ";
         drawBar("", stat.income, maxValue, barWidth);
-        std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.income << std::endl;
+        std::cout << " $" << std::fixed << std::setprecision(2) << stat.income << std::endl;
         
         std::cout << std::setw(11) << " ";
         // Expense
         std::cout << "Expense: ";
         drawBar("", stat.expense, maxValue, barWidth);
-        std::cout << " ¥" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
+        std::cout << " $" << std::fixed << std::setprecision(2) << stat.expense << std::endl;
         
         std::cout << std::setw(11) << " ";
-        std::cout << "Balance: ¥" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
+        std::cout << "Balance: $" << std::fixed << std::setprecision(2) << stat.balance << "\n" << std::endl;
     }
 }
 
