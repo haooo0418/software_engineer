@@ -78,7 +78,7 @@ void Visualization::displayCategoryPieChart(const std::vector<CategoryStatistics
     // Print title with border
     std::string border(title.length() + 4, '=');
     std::cout << "\n" << border << std::endl;
-    std::cout << "  " << title << std::endl;
+    std::cout << "  " << title << " (PIE CHART)" << std::endl;
     std::cout << border << "\n" << std::endl;
 
     // Calculate total
@@ -99,34 +99,81 @@ void Visualization::displayCategoryPieChart(const std::vector<CategoryStatistics
                   return a.amount > b.amount;
               });
 
-    const int barWidth = 50;
-    const int labelWidth = 15;
-
-    // Print header
-    std::cout << std::left << std::setw(labelWidth) << "Category" 
-              << std::setw(barWidth + 4) << "Distribution" 
-              << std::setw(10) << "Percent" 
-              << std::setw(12) << "Amount" 
-              << "Count" << std::endl;
-    std::cout << std::string(labelWidth + barWidth + 40, '-') << std::endl;
-
     // Track cumulative percentage for "Others" category
     double displayedTotal = 0.0;
-    int displayedCount = 0;
-    const int maxCategories = 10; // Show top 10 categories
+    const int maxCategories = 8; // Show top 8 categories for pie chart
+    
+    // Collect categories to display
+    std::vector<std::pair<std::string, double>> pieData;
+    for (size_t i = 0; i < sortedStats.size() && i < maxCategories; ++i) {
+        pieData.push_back({sortedStats[i].category, sortedStats[i].amount});
+        displayedTotal += sortedStats[i].amount;
+    }
+    
+    // Add "Others" if needed
+    if (sortedStats.size() > maxCategories) {
+        double othersAmount = total - displayedTotal;
+        pieData.push_back({"Others", othersAmount});
+    }
+    
+    // Display ASCII pie chart visual
+    std::cout << "        .--------.\n";
+    std::cout << "       /          \\\n";
+    std::cout << "      /            \\\n";
+    std::cout << "     |              |\n";
+    std::cout << "     |   PIE CHART  |\n";
+    std::cout << "     |              |\n";
+    std::cout << "      \\            /\n";
+    std::cout << "       \\          /\n";
+    std::cout << "        '--------'\n\n";
 
+    // Display legend with percentages
+    std::cout << "LEGEND (by percentage):\n";
+    std::cout << std::string(70, '-') << std::endl;
+    
+    const int labelWidth = 18;
+    const int barWidth = 30;
+    
+    for (const auto& item : pieData) {
+        double percentage = (item.second / total) * 100.0;
+        
+        // Create slice representation
+        std::string slice = "[";
+        int filledWidth = static_cast<int>((percentage / 100.0) * barWidth);
+        for (int i = 0; i < barWidth; ++i) {
+            if (i < filledWidth) {
+                slice += "#";
+            } else {
+                slice += " ";
+            }
+        }
+        slice += "]";
+        
+        std::cout << std::left << std::setw(labelWidth) << item.first
+                  << slice << " "
+                  << std::fixed << std::setprecision(1) << std::right << std::setw(6) << percentage << "%\n";
+    }
+    
+    std::cout << std::string(70, '-') << std::endl;
+    
+    // Display detailed breakdown
+    std::cout << "\nDETAILED BREAKDOWN:\n";
+    std::cout << std::string(70, '-') << std::endl;
+    std::cout << std::left << std::setw(labelWidth) << "Category" 
+              << std::setw(12) << "Amount" 
+              << std::setw(10) << "Percent" 
+              << "Count" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
+
+    // Display all categories (not just pie slices)
     for (size_t i = 0; i < sortedStats.size() && i < maxCategories; ++i) {
         const auto& stat = sortedStats[i];
         double percentage = (stat.amount / total) * 100.0;
         
-        std::cout << std::left << std::setw(labelWidth) << stat.category << "";
-        std::cout << getEnhancedPercentageBar(percentage, barWidth);
-        std::cout << " " << std::fixed << std::setprecision(1) << std::right << std::setw(6) << percentage << "% ";
-        std::cout << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << stat.amount << " ";
-        std::cout << "(" << stat.count << ")" << std::endl;
-        
-        displayedTotal += stat.amount;
-        displayedCount++;
+        std::cout << std::left << std::setw(labelWidth) << stat.category
+                  << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << stat.amount << " "
+                  << std::fixed << std::setprecision(1) << std::right << std::setw(8) << percentage << "% "
+                  << "(" << stat.count << ")" << std::endl;
     }
 
     // Show "Others" if there are more categories
@@ -138,25 +185,23 @@ void Visualization::displayCategoryPieChart(const std::vector<CategoryStatistics
             othersCount += sortedStats[i].count;
         }
         
-        std::cout << std::left << std::setw(labelWidth) << "Others" << "";
-        std::cout << getEnhancedPercentageBar(othersPercentage, barWidth);
-        std::cout << " " << std::fixed << std::setprecision(1) << std::right << std::setw(6) << othersPercentage << "% ";
-        std::cout << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << othersAmount << " ";
-        std::cout << "(" << othersCount << ")" << std::endl;
+        std::cout << std::left << std::setw(labelWidth) << "Others"
+                  << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << othersAmount << " "
+                  << std::fixed << std::setprecision(1) << std::right << std::setw(8) << othersPercentage << "% "
+                  << "(" << othersCount << ")" << std::endl;
     }
     
     // Print summary
-    std::cout << std::string(labelWidth + barWidth + 40, '-') << std::endl;
-    std::cout << std::left << std::setw(labelWidth) << "TOTAL" 
-              << std::setw(barWidth + 10) << "" 
-              << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << total;
-    
-    // Calculate total count
+    std::cout << std::string(70, '-') << std::endl;
     int totalCount = 0;
     for (const auto& stat : stats) {
         totalCount += stat.count;
     }
-    std::cout << " (" << totalCount << ")" << std::endl;
+    std::cout << std::left << std::setw(labelWidth) << "TOTAL"
+              << "$" << std::fixed << std::setprecision(2) << std::right << std::setw(10) << total << " "
+              << std::setw(9) << "100.0% "
+              << "(" << totalCount << ")" << std::endl;
+    std::cout << std::string(70, '=') << std::endl;
 }
 
 void Visualization::displayAccountBarChart(const std::vector<AccountStatistics>& stats, const std::string& title) {
