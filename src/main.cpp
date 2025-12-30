@@ -8,39 +8,45 @@
 #include <sstream>
 
 #ifdef _WIN32
-#pragma warning(disable: 4996) // Disable deprecation warnings for localtime on Windows
+#pragma warning(disable : 4996) // Disable deprecation warnings for localtime on Windows
 #endif
 
-void clearScreen() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
 
-void waitForEnter() {
+void waitForEnter()
+{
     std::cout << "\nPress Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 }
 
-void displayHeader(const std::string& title) {
+void displayHeader(const std::string &title)
+{
     std::cout << "\n+-------------------------------------------------------+\n";
     std::cout << "|  " << std::left << std::setw(51) << title << "|\n";
     std::cout << "+-------------------------------------------------------+\n\n";
 }
 
-void showSuccessMessage(const std::string& message) {
+void showSuccessMessage(const std::string &message)
+{
     std::cout << "\n[OK] " << message << std::endl;
     std::cout << "-------------------------------------------\n";
 }
 
-void showErrorMessage(const std::string& message) {
+void showErrorMessage(const std::string &message)
+{
     std::cout << "\n[ERROR] " << message << std::endl;
 }
 
-void showMainMenu() {
+void showMainMenu()
+{
     std::cout << "\n+-------------------------------------------------------+\n";
     std::cout << "|         Personal Accounting System - Main Menu       |\n";
     std::cout << "+-------------------------------------------------------+\n\n";
@@ -55,7 +61,8 @@ void showMainMenu() {
     std::cout << "\nSelect option (1-8): ";
 }
 
-void quickAddTransaction(AccountingSystem& system) {
+void quickAddTransaction(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Quick Add");
 
@@ -66,7 +73,8 @@ void quickAddTransaction(AccountingSystem& system) {
     std::cout << "Select (1-2): ";
     std::cin >> typeChoice;
 
-    if (typeChoice != 1 && typeChoice != 2) {
+    if (typeChoice != 1 && typeChoice != 2)
+    {
         showErrorMessage("Invalid selection");
         waitForEnter();
         return;
@@ -81,9 +89,12 @@ void quickAddTransaction(AccountingSystem& system) {
     std::cin.ignore();
 
     std::cout << "\nCategory:\n";
-    if (type == TransactionType::INCOME) {
+    if (type == TransactionType::INCOME)
+    {
         std::cout << "  1. Salary  2. Bonus  3. Investment  4. Other\n";
-    } else {
+    }
+    else
+    {
         std::cout << "  1. Food  2. Transport  3. Shopping  4. Entertainment  5. Medical  6. Service  7. Other\n";
     }
     std::cout << "Enter category name: ";
@@ -102,13 +113,16 @@ void quickAddTransaction(AccountingSystem& system) {
     std::cin.ignore();
 
     time_t date;
-    if (useCurrentDate == 'y' || useCurrentDate == 'Y') {
+    if (useCurrentDate == 'y' || useCurrentDate == 'Y')
+    {
         date = time(nullptr);
-    } else {
+    }
+    else
+    {
         std::cout << "Enter date (YYYY-MM-DD): ";
         std::string dateStr;
         std::getline(std::cin, dateStr);
-        
+
         struct tm tm = {};
         std::istringstream ss(dateStr);
         ss >> std::get_time(&tm, "%Y-%m-%d");
@@ -119,36 +133,42 @@ void quickAddTransaction(AccountingSystem& system) {
     std::string notes;
     std::getline(std::cin, notes);
 
-    if (system.addTransaction(type, amount, category, account, date, notes)) {
+    if (system.addTransaction(type, amount, category, account, date, notes))
+    {
         showSuccessMessage("Transaction added successfully!");
         std::cout << "\nTransaction Details:\n";
         std::cout << "  Type: " << (type == TransactionType::INCOME ? "Income" : "Expense") << "\n";
         std::cout << "  Amount: $" << std::fixed << std::setprecision(2) << amount << "\n";
         std::cout << "  Category: " << category << "\n";
         std::cout << "  Account: " << account << "\n";
-        
+
         char dateStr[20];
-        struct tm* timeinfo = localtime(&date);
+        struct tm *timeinfo = localtime(&date);
         strftime(dateStr, sizeof(dateStr), "%Y-%m-%d", timeinfo);
         std::cout << "  Date: " << dateStr << "\n";
-        
-        if (!notes.empty()) {
+
+        if (!notes.empty())
+        {
             std::cout << "  Notes: " << notes << "\n";
         }
-    } else {
+    }
+    else
+    {
         showErrorMessage("Failed to add transaction");
     }
 
     waitForEnter();
 }
 
-void viewTransactionList(AccountingSystem& system) {
+void viewTransactionList(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Transaction List");
 
     auto transactions = system.getTransactions();
-    
-    if (transactions.empty()) {
+
+    if (transactions.empty())
+    {
         std::cout << "No transactions\n";
         waitForEnter();
         return;
@@ -164,7 +184,8 @@ void viewTransactionList(AccountingSystem& system) {
               << "Notes\n";
     std::cout << std::string(88, '-') << "\n";
 
-    for (const auto& t : transactions) {
+    for (const auto &t : transactions)
+    {
         std::cout << std::left
                   << std::setw(20) << t.getTransactionId()
                   << std::setw(8) << t.getTypeString()
@@ -179,7 +200,8 @@ void viewTransactionList(AccountingSystem& system) {
     waitForEnter();
 }
 
-void editTransaction(AccountingSystem& system) {
+void editTransaction(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Edit Transaction");
 
@@ -188,8 +210,9 @@ void editTransaction(AccountingSystem& system) {
     std::string transactionId;
     std::getline(std::cin, transactionId);
 
-    Transaction* t = system.getTransaction(transactionId);
-    if (!t) {
+    Transaction *t = system.getTransaction(transactionId);
+    if (!t)
+    {
         showErrorMessage("Transaction not found");
         waitForEnter();
         return;
@@ -224,7 +247,7 @@ void editTransaction(AccountingSystem& system) {
     std::cout << "NewDate (YYYY-MM-DD): ";
     std::string dateStr;
     std::getline(std::cin, dateStr);
-    
+
     struct tm tm = {};
     std::istringstream ss(dateStr);
     ss >> std::get_time(&tm, "%Y-%m-%d");
@@ -234,16 +257,20 @@ void editTransaction(AccountingSystem& system) {
     std::string notes;
     std::getline(std::cin, notes);
 
-    if (system.editTransaction(transactionId, type, amount, category, account, date, notes)) {
+    if (system.editTransaction(transactionId, type, amount, category, account, date, notes))
+    {
         showSuccessMessage("Edited successfully!");
-    } else {
+    }
+    else
+    {
         showErrorMessage("Edit failed");
     }
 
     waitForEnter();
 }
 
-void deleteTransaction(AccountingSystem& system) {
+void deleteTransaction(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Delete Transaction");
 
@@ -252,8 +279,9 @@ void deleteTransaction(AccountingSystem& system) {
     std::string transactionId;
     std::getline(std::cin, transactionId);
 
-    Transaction* t = system.getTransaction(transactionId);
-    if (!t) {
+    Transaction *t = system.getTransaction(transactionId);
+    if (!t)
+    {
         showErrorMessage("Transaction not found");
         waitForEnter();
         return;
@@ -269,20 +297,27 @@ void deleteTransaction(AccountingSystem& system) {
     char confirm;
     std::cin >> confirm;
 
-    if (confirm == 'y' || confirm == 'Y') {
-        if (system.deleteTransaction(transactionId)) {
+    if (confirm == 'y' || confirm == 'Y')
+    {
+        if (system.deleteTransaction(transactionId))
+        {
             showSuccessMessage("Deleted successfully!");
-        } else {
+        }
+        else
+        {
             showErrorMessage("Delete failed");
         }
-    } else {
+    }
+    else
+    {
         std::cout << "Delete cancelled\n";
     }
 
     waitForEnter();
 }
 
-void showOverview(AccountingSystem& system) {
+void showOverview(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Financial Overview");
 
@@ -300,7 +335,8 @@ void showOverview(AccountingSystem& system) {
     waitForEnter();
 }
 
-void showStatistics(AccountingSystem& system) {
+void showStatistics(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Statistics");
 
@@ -318,43 +354,50 @@ void showStatistics(AccountingSystem& system) {
 
     auto transactions = system.getTransactions();
 
-    switch (choice) {
-        case 1: {
-            auto stats = Statistics::getMonthlyStatistics(transactions);
-            Visualization::displayTimeBarChart(stats, "Monthly Statistics");
-            break;
-        }
-        case 2: {
-            auto stats = Statistics::getYearlyStatistics(transactions);
-            Visualization::displayTimeBarChart(stats, "Yearly Statistics");
-            break;
-        }
-        case 3: {
-            auto stats = Statistics::getIncomeByCategory(transactions);
-            Visualization::displayCategoryPieChart(stats, "Income by Category");
-            break;
-        }
-        case 4: {
-            auto stats = Statistics::getExpenseByCategory(transactions);
-            Visualization::displayCategoryPieChart(stats, "Expense by Category");
-            break;
-        }
-        case 5: {
-            auto stats = Statistics::getAccountStatistics(transactions);
-            Visualization::displayAccountBarChart(stats, "Account Statistics");
-            break;
-        }
-        case 6:
-            return;
-        default:
-            showErrorMessage("Invalid selection");
-            break;
+    switch (choice)
+    {
+    case 1:
+    {
+        auto stats = Statistics::getMonthlyStatistics(transactions);
+        Visualization::displayTimeBarChart(stats, "Monthly Statistics");
+        break;
+    }
+    case 2:
+    {
+        auto stats = Statistics::getYearlyStatistics(transactions);
+        Visualization::displayTimeBarChart(stats, "Yearly Statistics");
+        break;
+    }
+    case 3:
+    {
+        auto stats = Statistics::getIncomeByCategory(transactions);
+        Visualization::displayCategoryPieChart(stats, "Income by Category");
+        break;
+    }
+    case 4:
+    {
+        auto stats = Statistics::getExpenseByCategory(transactions);
+        Visualization::displayCategoryPieChart(stats, "Expense by Category");
+        break;
+    }
+    case 5:
+    {
+        auto stats = Statistics::getAccountStatistics(transactions);
+        Visualization::displayAccountBarChart(stats, "Account Statistics");
+        break;
+    }
+    case 6:
+        return;
+    default:
+        showErrorMessage("Invalid selection");
+        break;
     }
 
     waitForEnter();
 }
 
-void searchTransactions(AccountingSystem& system) {
+void searchTransactions(AccountingSystem &system)
+{
     clearScreen();
     displayHeader("Search");
 
@@ -365,7 +408,8 @@ void searchTransactions(AccountingSystem& system) {
 
     auto results = system.searchTransactions(keyword);
 
-    if (results.empty()) {
+    if (results.empty())
+    {
         std::cout << "\nNo matching records\n";
         waitForEnter();
         return;
@@ -383,7 +427,8 @@ void searchTransactions(AccountingSystem& system) {
               << "Notes\n";
     std::cout << std::string(88, '-') << "\n";
 
-    for (const auto& t : results) {
+    for (const auto &t : results)
+    {
         std::cout << std::left
                   << std::setw(20) << t.getTransactionId()
                   << std::setw(8) << t.getTypeString()
@@ -397,8 +442,10 @@ void searchTransactions(AccountingSystem& system) {
     waitForEnter();
 }
 
-void showLoginMenu(AccountingSystem& system) {
-    while (true) {
+void showLoginMenu(AccountingSystem &system)
+{
+    while (true)
+    {
         clearScreen();
         std::cout << "\n+-------------------------------------------------------+\n";
         std::cout << "|       Welcome to Personal Accounting System          |\n";
@@ -412,10 +459,11 @@ void showLoginMenu(AccountingSystem& system) {
         std::cin >> choice;
         std::cin.ignore();
 
-        if (choice == 1) {
+        if (choice == 1)
+        {
             clearScreen();
             displayHeader("User Login");
-            
+
             std::cout << "Username: ";
             std::string username;
             std::getline(std::cin, username);
@@ -424,19 +472,24 @@ void showLoginMenu(AccountingSystem& system) {
             std::string password;
             std::getline(std::cin, password);
 
-            if (system.login(username, password)) {
+            if (system.login(username, password))
+            {
                 showSuccessMessage("Login successful!");
                 std::cout << "Welcome back, " << username << "!\n";
                 waitForEnter();
                 return;
-            } else {
+            }
+            else
+            {
                 showErrorMessage("Invalid username or password");
                 waitForEnter();
             }
-        } else if (choice == 2) {
+        }
+        else if (choice == 2)
+        {
             clearScreen();
             displayHeader("User Registration");
-            
+
             std::cout << "Username: ";
             std::string username;
             std::getline(std::cin, username);
@@ -445,29 +498,39 @@ void showLoginMenu(AccountingSystem& system) {
             std::string password;
             std::getline(std::cin, password);
 
-            if (system.registerUser(username, password)) {
+            if (system.registerUser(username, password))
+            {
                 showSuccessMessage("Registration successful!");
                 std::cout << "You can now login with " << username << "\n";
                 waitForEnter();
-            } else {
+            }
+            else
+            {
                 showErrorMessage("Username already exists");
                 waitForEnter();
             }
-        } else if (choice == 3) {
+        }
+        else if (choice == 3)
+        {
             std::cout << "\nThank you, goodbye!\n";
             exit(0);
-        } else {
+        }
+        else
+        {
             showErrorMessage("Invalid selection");
             waitForEnter();
         }
     }
 }
 
-int main() {
+int main()
+{
     AccountingSystem system;
 
-    while (true) {
-        if (!system.isLoggedIn()) {
+    while (true)
+    {
+        if (!system.isLoggedIn())
+        {
             showLoginMenu(system);
         }
 
@@ -477,37 +540,38 @@ int main() {
         int choice;
         std::cin >> choice;
 
-        switch (choice) {
-            case 1:
-                quickAddTransaction(system);
-                break;
-            case 2:
-                viewTransactionList(system);
-                break;
-            case 3:
-                editTransaction(system);
-                break;
-            case 4:
-                deleteTransaction(system);
-                break;
-            case 5:
-                showOverview(system);
-                break;
-            case 6:
-                showStatistics(system);
-                break;
-            case 7:
-                searchTransactions(system);
-                break;
-            case 8:
-                system.logout();
-                std::cout << "\nLogged out\n";
-                waitForEnter();
-                break;
-            default:
-                showErrorMessage("Invalid selection");
-                waitForEnter();
-                break;
+        switch (choice)
+        {
+        case 1:
+            quickAddTransaction(system);
+            break;
+        case 2:
+            viewTransactionList(system);
+            break;
+        case 3:
+            editTransaction(system);
+            break;
+        case 4:
+            deleteTransaction(system);
+            break;
+        case 5:
+            showOverview(system);
+            break;
+        case 6:
+            showStatistics(system);
+            break;
+        case 7:
+            searchTransactions(system);
+            break;
+        case 8:
+            system.logout();
+            std::cout << "\nLogged out\n";
+            waitForEnter();
+            break;
+        default:
+            showErrorMessage("Invalid selection");
+            waitForEnter();
+            break;
         }
     }
 
